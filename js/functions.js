@@ -7,7 +7,6 @@ function isPalindrom (string) {
   string = string.replaceAll(' ', '').toLowerCase();
 
   return string.split('').reverse().join('') === string;
-
 }
 
 // * Функция для поиска числа в строке * //
@@ -22,6 +21,7 @@ function getInteger (value) {
   return NaN;
 }
 
+/*
 // * Проверка сравнения длинны строки с числом * //
 console.log(isStringLonger('проверяемая строка', 20));
 console.log(isStringLonger('проверяемая строка', 18));
@@ -42,3 +42,4 @@ console.log(getInteger('а я томат'));
 console.log(getInteger(2023));
 console.log(getInteger(-1));
 console.log(getInteger(1.5));
+*/
