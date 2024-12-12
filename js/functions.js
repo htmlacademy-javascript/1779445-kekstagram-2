@@ -21,6 +21,7 @@ function getInteger (value) {
   return NaN;
 }
 
+
 isStringLonger('проверяемая строка', 20);
 isPalindrom('топот');
 getInteger('2023 год');
