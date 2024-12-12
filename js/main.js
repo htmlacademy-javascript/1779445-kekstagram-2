@@ -62,20 +62,13 @@ function createRandomValueAtRange(min, max) {
 
 // Генератор массива комментариев //
 function getArrayComments() {
-
-  // Функция для получения случайным образом одного или двух комментариев //
-  function getText(){
-    const value2 = createRandomValueAtRange(MIN_VALUE, COMMENTS.length - 1);
-    return Math.random() < 0.5 === false ? COMMENTS[value2()] : `${COMMENTS[value2()]} ${COMMENTS[value2()]}`;
-  }
-
   const getRandomCommentsId = createRandomValueAtRange(MIN_VALUE, MAX_COMMENTS_VALUE);
 
   // Создаем экземпляр комментария в качестве объекта //
   const commentObject = () => ({
     id: getRandomCommentsId(),
     avatar: `img/avatar-${getRandomInteger(MIN_VALUE, MAX_VALUE_AVATAR)}.svg.`,
-    comment:  getText(),
+    message:  Array.from({length: getRandomInteger(1,2)}, () => COMMENTS[createRandomValueAtRange(0, COMMENTS.length - 1)()]).join(' '),
     name: NAMES[getRandomInteger(MIN_VALUE, MAX_VALUE_AVATAR)],
   });
 
