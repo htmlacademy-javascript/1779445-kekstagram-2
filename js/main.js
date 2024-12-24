@@ -1,5 +1,2 @@
-import {MAX_VALUE} from './const.js';
-import {createImage} from './data.js';
-
-
-createImage(MAX_VALUE);
+import {renderingPhotos} from './render_image.js';
+renderingPhotos();

@@ -29,12 +29,14 @@ const COMMENTS = [
   'Лица у людей на фотке перекошены, как будто их избивают.', 'Как можно было поймать такой неудачный момент?!',
 ];
 
-const MIN_VALUE = 1;
-const MAX_VALUE = 25;
-const MIN_LIKES = 15;
-const MAX_LIKES = 200;
-const MAX_COMMENTS_VALUE = 30;
-const MAX_VALUE_AVATAR = 6;
+export const PhotosConst = {
+  MIN_VALUE: 1,
+  MAX_VALUE: 25,
+  MIN_LIKES: 15,
+  MAX_LIKES: 200,
+  MAX_COMMENTS_VALUE: 30,
+  MAX_VALUE_AVATAR: 6
+};
 
 export {DESCRIPTIONS, NAMES, COMMENTS};
-export {MIN_VALUE, MAX_VALUE, MIN_LIKES, MAX_LIKES, MAX_COMMENTS_VALUE, MAX_VALUE_AVATAR};
+
