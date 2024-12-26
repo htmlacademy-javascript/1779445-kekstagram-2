@@ -22,4 +22,6 @@ function createRandomValueAtRange(min, max) {
   };
 }
 
-export {getRandomInteger, createRandomValueAtRange};
+const isEnterKey = (evt) => evt.key === 'Escape';
+
+export {getRandomInteger, createRandomValueAtRange, isEnterKey};
