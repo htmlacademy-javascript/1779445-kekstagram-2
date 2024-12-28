@@ -53,11 +53,10 @@ export const renderBigPicture = (pictureList) => {
     document.querySelector('.social__comment-total-count').textContent = comments.length;
     document.querySelector('.social__caption').textContent = description;
 
-    // Сбрасываем индекс комментариев
     currentCommentIndex = 0;
-    currentComments = comments; // Обновляем текущие комментарии
-    ulList.innerHTML = ''; // Очищаем предыдущие комментарии
-    createcomment(); // Загружаем первые 5 комментариев
+    currentComments = comments;
+    ulList.innerHTML = '';
+    createcomment();
   };
 
   const closePhoto = () => {
