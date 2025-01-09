@@ -1,2 +1,4 @@
-import {renderingPhotos} from './render_image.js';
-renderingPhotos();
+import {renderingPicture} from './rendering-image.js';
+renderingPicture();
+
+
