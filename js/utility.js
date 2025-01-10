@@ -11,7 +11,7 @@ const createRandomValueAtRange = (min, max) => {
   const previousValues = new Set();
   let currentValue;
 
-  return function () {
+  return () => {
     if(previousValues.size >= (max - min + 1)){
       return null;
     }
