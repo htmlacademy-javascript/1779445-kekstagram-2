@@ -26,6 +26,6 @@ const createRandomValueAtRange = (min, max) => {
 };
 
 // Проверка нажатия клавиши Escape //
-const isEnterKey = (evt) => evt.key === 'Escape';
+const isEscapeKey = (evt) => evt.key === 'Escape';
 
-export { getRandomInteger, createRandomValueAtRange, isEnterKey };
+export { getRandomInteger, createRandomValueAtRange, isEscapeKey };

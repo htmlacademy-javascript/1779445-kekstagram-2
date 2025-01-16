@@ -1,4 +1,5 @@
-import {renderingPicture} from './rendering-image.js';
+import {renderingPicture} from './rendering-picture.js';
+import './form-validation.js';
 renderingPicture();
 
 

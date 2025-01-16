@@ -1,4 +1,4 @@
-import { isEnterKey } from './utility.js';
+import { isEscapeKey } from './utility.js';
 import { PICTURE_CONST } from './constant.js';
 
 const pictures = document.querySelector('.pictures');
@@ -11,37 +11,32 @@ const body = document.body;
 let currentCommentIndex = 0; // Индекс текущего комментария
 let currentComments = []; // Массив для хранения комментариев текущего изображения
 
-// Функция для отрисовки большого изображения //
-export const renderBigPicture = (pictureList) => {
+// Создание комментариев к изображению //
+const createcomment = () => {
+  // Добавляем комментарии по 5 штук
+  const nextComments = currentComments.slice(currentCommentIndex, currentCommentIndex + PICTURE_CONST.MAX_LOAD_VALUE);
 
-  // Создание комментариев к изображению //
-  const createcomment = () => {
-    // Добавляем комментарии по 5 штук
-    const nextComments = currentComments.slice(currentCommentIndex, currentCommentIndex + PICTURE_CONST.MAX_LOAD_VALUE);
+  nextComments.forEach((comment) => {
+    const liElement = document.createElement('li');
+    liElement.classList.add('social__comment');
 
-    nextComments.forEach((comment) => {
-      const liElement = document.createElement('li');
-      liElement.classList.add('social__comment');
-
-      liElement.innerHTML =
+    liElement.innerHTML =
       `<img class="social__picture" src="${comment.avatar}" alt="${comment.name}" width="35" height="35">
       <p class="social__text">${comment.message}</p>`;
 
-      ulList.appendChild(liElement);
-    });
+    ulList.appendChild(liElement);
+  });
 
-    currentCommentIndex += 5;
+  currentCommentIndex += nextComments.length; // Увеличиваем индекс на количество загруженных комментариев
 
-    // Проверяем, нужно ли скрыть кнопку загрузки комментариев
-    if (currentCommentIndex >= currentComments.length) {
-      commentsLoader.classList.add('hidden');
-    } else {
-      commentsLoader.classList.remove('hidden');
-    }
+  commentsLoader.classList.toggle('hidden', currentCommentIndex >= currentComments.length); // скрываем кнопку загрузки, если показаны все комментарии
 
-    // Обновляем счетчик показанных комментариев
-    document.querySelector('.social__comment-shown-count').textContent = Math.min(currentCommentIndex, currentComments.length);
-  };
+  // Обновляем счетчик показанных комментариев
+  document.querySelector('.social__comment-shown-count').textContent = Math.min(currentCommentIndex, currentComments.length);
+};
+
+// Функция для отрисовки большого изображения //
+export const renderBigPicture = (pictureList) => {
 
   // Открытие полноразмерного изображения //
   const openPhoto = ({ url, likes, comments, description }) => {
@@ -53,22 +48,29 @@ export const renderBigPicture = (pictureList) => {
     document.querySelector('.social__comment-total-count').textContent = comments.length;
     document.querySelector('.social__caption').textContent = description;
 
+    // Сбрасываем индекс и массив комментариев
     currentCommentIndex = 0;
     currentComments = comments;
-    ulList.innerHTML = '';
-    createcomment();
+    ulList.innerHTML = ''; // Очищаем предыдущие комментарии
+    createcomment(); // Загружаем первые комментарии
+    document.addEventListener('keydown', onDocumentKeydown);
   };
 
   const closePhoto = () => {
     bigPictureOverlay.classList.add('hidden');
     body.classList.remove('modal-open');
+    // Удаляем обработчики событий при закрытии
+    commentsLoader.removeEventListener('click', createcomment);
+    document.removeEventListener('keydown', onDocumentKeydown);
+    cancelButton.removeEventListener('click', closePhoto);
   };
 
-  const onDocumentKeydown = (evt) => {
-    if (isEnterKey(evt)) {
+
+  function onDocumentKeydown(evt) { // Используем Function Declaration для хостинга
+    if (isEscapeKey(evt)) {
       closePhoto();
     }
-  };
+  }
 
   pictures.addEventListener('click', (evt) => {
     if (evt.target.classList.contains('picture__img')) {
@@ -77,10 +79,6 @@ export const renderBigPicture = (pictureList) => {
     }
   });
 
-  commentsLoader.addEventListener('click', () => {
-    createcomment();
-  });
-
-  document.addEventListener('keydown', onDocumentKeydown);
+  commentsLoader.addEventListener('click', () => createcomment());
   cancelButton.addEventListener('click', () => closePhoto());
 };
