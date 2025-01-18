@@ -29,6 +29,7 @@ let currentFilter = 'origignal';
 sliderElement.noUiSlider.on('update', () => {
   effectValue.value = sliderElement.noUiSlider.get();
   picturePreview.style.filter = changeFilter(currentFilter);
+
   if(currentFilter === 'origignal'){
     container.classList.add('visually-hidden');
   }
@@ -37,6 +38,7 @@ sliderElement.noUiSlider.on('update', () => {
 effectList.addEventListener('change', (evt) => {
   const clickedElement = evt.target;
   currentFilter = clickedElement.value;
+
   if(currentFilter === 'none'){
     picturePreview.style.filter = 'none';
     container.classList.add('visually-hidden');
