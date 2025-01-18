@@ -1,5 +1,7 @@
 import { isEscapeKey } from './utility.js';
 import { validation } from './hashtag-validation.js';
+import { resetForm } from './slider-picture.js';
+import { resetScale } from './scale-picture.js';
 
 const { hashtagsValidation, getHashTagsError, commentsValidation, getCommentsError } = validation;
 
@@ -11,21 +13,22 @@ const closeButton = document.querySelector('.img-upload__cancel');
 const hashtagsInput = document.querySelector('.text__hashtags');
 const commentsArea = document.querySelector('.text__description');
 
-// Инициализация библиотеки Pristine для валидации формы //
+// Инициализация библиотеки Pristine для валидации формы
 const pristine = new Pristine(uploadForm, {
   classTo: 'img-upload__field-wrapper',
   errorTextParent: 'img-upload__field-wrapper',
   errorClass: 'img-upload__field-wrapper--error',
 });
 
-
 function closePhotoEditor() {
   pictureOverlay.classList.add('hidden');
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
   closeButton.removeEventListener('click', closePhotoEditor);
-  uploadForm .reset();
+  uploadForm.reset();
   pristine.reset();
+  resetForm();
+  resetScale();
 }
 
 function onDocumentKeydown(evt) {
@@ -35,7 +38,7 @@ function onDocumentKeydown(evt) {
   }
 }
 
-// Добавление обработчика, который отменяет нажатие esc при фокусе полей //
+// Добавление обработчика, который отменяет нажатие esc при фокусе полей
 [hashtagsInput, commentsArea].forEach((input) => {
   input.addEventListener('keydown', (evt) => {
     if(isEscapeKey(evt)){

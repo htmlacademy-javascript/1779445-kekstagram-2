@@ -1,6 +1,8 @@
 import { isEscapeKey } from './utility.js';
 import { PICTURE_CONST } from './constant.js';
 
+const { MAX_COMMENTS_UPLOADED } = PICTURE_CONST;
+
 const pictures = document.querySelector('.pictures');
 const bigPictureOverlay = document.querySelector('.big-picture');
 const cancelButton = bigPictureOverlay.querySelector('.big-picture__cancel');
@@ -11,34 +13,30 @@ const body = document.body;
 let currentCommentIndex = 0; // Индекс текущего комментария
 let currentComments = []; // Массив для хранения комментариев текущего изображения
 
-// Создание комментариев к изображению //
+// Создание комментариев к изображению
 const createcomment = () => {
   // Добавляем комментарии по 5 штук
-  const nextComments = currentComments.slice(currentCommentIndex, currentCommentIndex + PICTURE_CONST.MAX_LOAD_VALUE);
+  const nextComments = currentComments.slice(currentCommentIndex, currentCommentIndex + MAX_COMMENTS_UPLOADED);
 
-  nextComments.forEach((comment) => {
+  nextComments.forEach(({ avatar, name, message }) => {
     const liElement = document.createElement('li');
     liElement.classList.add('social__comment');
-
     liElement.innerHTML =
-      `<img class="social__picture" src="${comment.avatar}" alt="${comment.name}" width="35" height="35">
-      <p class="social__text">${comment.message}</p>`;
+      `<img class="social__picture" src="${avatar}" alt="${name}" width="35" height="35">
+      <p class="social__text">${message}</p>`;
 
     ulList.appendChild(liElement);
   });
 
   currentCommentIndex += nextComments.length; // Увеличиваем индекс на количество загруженных комментариев
-
   commentsLoader.classList.toggle('hidden', currentCommentIndex >= currentComments.length); // скрываем кнопку загрузки, если показаны все комментарии
-
-  // Обновляем счетчик показанных комментариев
-  document.querySelector('.social__comment-shown-count').textContent = Math.min(currentCommentIndex, currentComments.length);
+  document.querySelector('.social__comment-shown-count').textContent = Math.min(currentCommentIndex, currentComments.length); // Обновляем счетчик показанных комментариев
 };
 
-// Функция для отрисовки большого изображения //
+// Функция для отрисовки большого изображения
 export const renderBigPicture = (pictureList) => {
 
-  // Открытие полноразмерного изображения //
+  // Открытие полноразмерного изображения
   const openPhoto = ({ url, likes, comments, description }) => {
     body.classList.add('modal-open');
     bigPictureOverlay.classList.remove('hidden');
@@ -56,6 +54,7 @@ export const renderBigPicture = (pictureList) => {
     document.addEventListener('keydown', onDocumentKeydown);
   };
 
+  // Закрытие полноразмерного изображения
   const closePhoto = () => {
     bigPictureOverlay.classList.add('hidden');
     body.classList.remove('modal-open');
@@ -64,7 +63,6 @@ export const renderBigPicture = (pictureList) => {
     document.removeEventListener('keydown', onDocumentKeydown);
     cancelButton.removeEventListener('click', closePhoto);
   };
-
 
   function onDocumentKeydown(evt) { // Используем Function Declaration для хостинга
     if (isEscapeKey(evt)) {
@@ -77,8 +75,7 @@ export const renderBigPicture = (pictureList) => {
       const selectedPicture = pictureList.find((item) => item.id === Number(evt.target.dataset.id));
       openPhoto(selectedPicture);
     }
+    commentsLoader.addEventListener('click', () => createcomment());
+    cancelButton.addEventListener('click', () => closePhoto());
   });
-
-  commentsLoader.addEventListener('click', () => createcomment());
-  cancelButton.addEventListener('click', () => closePhoto());
 };
