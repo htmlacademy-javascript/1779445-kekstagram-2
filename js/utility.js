@@ -1,4 +1,4 @@
-// Генератор случайных чисел //
+// Генератор случайных чисел
 const getRandomInteger = (min, max) => {
   const lower = Math.ceil(Math.min(Math.abs(min), Math.abs(max)));
   const highest = Math.floor(Math.max(Math.abs(min), Math.abs(max)));
@@ -6,7 +6,7 @@ const getRandomInteger = (min, max) => {
   return Math.floor(result);
 };
 
-// Генератор случайных неповторяющихся значений //
+// Генератор случайных уникальных значений
 const createRandomValueAtRange = (min, max) => {
   const previousValues = new Set();
   let currentValue;
@@ -25,7 +25,7 @@ const createRandomValueAtRange = (min, max) => {
   };
 };
 
-// Проверка нажатия клавиши Escape //
+// Проверка нажатия клавиши Escape
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
 export { getRandomInteger, createRandomValueAtRange, isEscapeKey };
