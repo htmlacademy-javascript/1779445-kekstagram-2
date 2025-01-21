@@ -48,7 +48,7 @@ effectList.addEventListener('change', (evt) => {
   }
 });
 
-export const resetForm = () => {
+export const resetSlider = () => {
   container.classList.add('visually-hidden');
   sliderElement.noUiSlider.set(100);
   picturePreview.style.filter = 'none';
