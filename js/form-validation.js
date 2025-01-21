@@ -16,8 +16,11 @@ const submitButton = document.querySelector('.img-upload__submit');
 
 const successAlert = document.querySelector('#success').content.querySelector('.success');
 
+let isErrorAlertOpen = false; // Переменная для отслеживания состояния окна ошибки
+
 // показываем сообщение если успешно отправили форму
 const showSuccsessAlert = () => {
+
   const successElement = successAlert.cloneNode(true);
   body.appendChild(successElement);
   const successButton = document.querySelector('.success__button');
@@ -52,6 +55,7 @@ const showSuccsessAlert = () => {
 const errorAlert = document.querySelector('#error').content.querySelector('.error');
 
 const showFailureAlert = () => {
+  isErrorAlertOpen = true;
   const errorElement = errorAlert.cloneNode(true);
   body.appendChild(errorElement);
   const errorButton = document.querySelector('.error__button');
@@ -66,6 +70,7 @@ const showFailureAlert = () => {
   function onDocumentKeydownAlert(evt) {
     if(isEscapeKey(evt)) {
       evt.preventDefault();
+      isErrorAlertOpen = false;
       closeErrorAlert();
     }
   }
@@ -101,7 +106,7 @@ function closePhotoEditor() {
 }
 
 function onDocumentKeydown(evt) {
-  if(isEscapeKey(evt)) {
+  if(isEscapeKey(evt) && isErrorAlertOpen === false) {
     evt.preventDefault();
     closePhotoEditor();
   }
@@ -152,6 +157,8 @@ uploadForm.addEventListener('submit', (evt) => {
 
           showSuccsessAlert();
           closePhotoEditor();
+        }else {
+          showFailureAlert();
         }
       })
       .catch(() => {
