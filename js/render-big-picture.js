@@ -34,7 +34,7 @@ const createcomment = () => {
 };
 
 // Функция для отрисовки большого изображения
-export const renderBigPicture = (pictureList) => {
+const renderBigPicture = (pictureArrayObj) => {
 
   // Открытие полноразмерного изображения
   const openPhoto = ({ url, likes, comments, description }) => {
@@ -72,10 +72,12 @@ export const renderBigPicture = (pictureList) => {
 
   pictures.addEventListener('click', (evt) => {
     if (evt.target.classList.contains('picture__img')) {
-      const selectedPicture = pictureList.find((item) => item.id === Number(evt.target.dataset.id));
+      const selectedPicture = pictureArrayObj.find((item) => item.id === Number(evt.target.dataset.id));
       openPhoto(selectedPicture);
     }
     commentsLoader.addEventListener('click', () => createcomment());
     cancelButton.addEventListener('click', () => closePhoto());
   });
 };
+
+export { renderBigPicture };
