@@ -1,5 +1,4 @@
 import { shuffle, debounce } from './utility.js';
-git 
 const imgFilters = document.querySelector('.img-filters');
 const imgForms = imgFilters.querySelector('.img-filters__form');
 const defaultButton = imgFilters.querySelector('#filter-default');
