@@ -1,32 +1,34 @@
-// // Генератор случайных чисел
-// const getRandomInteger = (min, max) => {
-//   const lower = Math.ceil(Math.min(Math.abs(min), Math.abs(max)));
-//   const highest = Math.floor(Math.max(Math.abs(min), Math.abs(max)));
-//   const result = Math.random() * (highest - lower + 1) + lower;
-//   return Math.floor(result);
-// };
+const body = document.body;
+const picturesElementTemplate = document.querySelector('#data-error').content.querySelector('.data-error');
 
-// // Генератор случайных уникальных значений
-// const createRandomValueAtRange = (min, max) => {
-//   const previousValues = new Set();
-//   let currentValue;
+const ALERT_SHOW_TIME = 5000;
 
-//   return () => {
-//     if(previousValues.size >= (max - min + 1)){
-//       return null;
-//     }
+const showFailureAlert = () => {
+  const photosElement = picturesElementTemplate.cloneNode(true);
+  body.appendChild(photosElement);
 
-//     do {
-//       currentValue = getRandomInteger(min, max);
-//     } while (previousValues.has(currentValue));
+  setTimeout(() => photosElement.remove(), ALERT_SHOW_TIME);
+};
 
-//     previousValues.add(currentValue);
-//     return currentValue;
-//   };
-// };
+//  Функция перемешивания Фишера — Йетса
+const shuffle = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1)); // случайный индекс от 0 до i
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+};
 
 // Проверка нажатия клавиши Escape
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-// export { getRandomInteger, createRandomValueAtRange, isEscapeKey };
-export { isEscapeKey };
+// Фукнция Debounce
+const debounce = (callback, timeoutDelay) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
+export { showFailureAlert, isEscapeKey, shuffle, debounce };

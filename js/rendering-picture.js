@@ -1,12 +1,5 @@
-// import { PICTURE_CONST } from './constant.js';
-// import { createImage } from './data.js';
-// import { renderBigPicture } from './render-big-picture.js';
-
 const pictureListElement = document.querySelector('.pictures');
 const picturesElementTemplate = document.querySelector('#picture').content.querySelector('.picture');
-
-// const pictureArrayObj = createImage(PICTURE_CONST.MAX_VALUE);
-
 const pictureFragment = document.createDocumentFragment();
 
 // Отрисовываем изображения
@@ -25,7 +18,7 @@ const renderingPictures = (pictureArrayObj) => {
   });
 
   pictureListElement.appendChild(pictureFragment);
+
 };
 
-// renderBigPicture(pictureArrayObj);
 export { renderingPictures };

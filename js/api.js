@@ -1,32 +1,22 @@
-import {renderingPictures} from './rendering-picture.js';
-import {renderBigPicture} from './render-big-picture.js';
+const BASE_URL = 'https://31.javascript.htmlacademy.pro/kekstagram';
 
-const body = document.body;
-const picturesElementTemplate = document.querySelector('#data-error').content.querySelector('.data-error');
-const ALERT_SHOW_TIME = 5000;
-
-const showAlert = () => {
-  const photosElement = picturesElementTemplate.cloneNode(true);
-  body.appendChild(photosElement);
-
-  setTimeout(() => {
-    photosElement.remove();
-  }, ALERT_SHOW_TIME);
+const Route = {
+  GET_DATA: '/data',
+  SEND_DATA: '/',
 };
 
-const fetchPicture = () => {
-  fetch('https://31.javascript.htmlacademy.pro/kekstagram/data')
+const load = (route, method = 'GET', body = null) =>
+  fetch(`${BASE_URL}${route}`, {method, body})
     .then((response) => {
       if (!response.ok) {
-        showAlert();
+        throw new Error();
       }
       return response.json();
     })
-    .then((pictureArrayObj) => {
-      renderingPictures(pictureArrayObj);
-      renderBigPicture(pictureArrayObj);
+    .catch(() => {
+      throw new Error();
     });
-};
 
-export { fetchPicture };
+export const getData = () => load(Route.GET_DATA);
 
+export const sendData = (body) => load(Route.SEND_DATA, 'POST', body);
