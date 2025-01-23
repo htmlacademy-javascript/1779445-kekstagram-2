@@ -1,6 +1,20 @@
-import './form-validation.js';
 import './scale-picture.js';
 import './slider-picture.js';
-import './api.js';
-import { fetchPicture } from './api.js';
-fetchPicture();
+import { sortPicture } from './sort-picture.js';
+import { getData } from './api.js';
+import { setUserFormSubmit} from './form-validation.js';
+import { showFailureAlert } from './utility.js';
+import { renderingPictures } from './rendering-picture.js';
+import { renderBigPicture } from './render-big-picture.js';
+
+
+getData()
+  .then((pictureArrayObj) => {
+    renderBigPicture(pictureArrayObj);
+    renderingPictures(pictureArrayObj);
+    sortPicture(pictureArrayObj);
+  })
+  .catch(showFailureAlert);
+
+setUserFormSubmit();
+
