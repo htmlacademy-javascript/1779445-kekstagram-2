@@ -21,12 +21,13 @@ const checkActive = (cb) => {
 
 // Отрисовываем картинки
 const renderView = (array) => {
+  clearPitureList();
   renderingPictures(array);
   renderBigPicture(array);
 };
 
 //Очищаем список
-const clearPitureList = () => {
+function clearPitureList () {
   const pictures = document.querySelectorAll('.picture');
   pictures.forEach((picture) => {
     // Проверяем, не является ли родителем элемент <template>
@@ -34,7 +35,7 @@ const clearPitureList = () => {
       picture.remove(); // Удаляем элемент picture, если он не внутри <template>
     }
   });
-};
+}
 
 // Добавляем debounce для отрисовки раз в DEBOUNCE_DELAY мс
 const debouncedRenderView = debounce(renderView, DEBOUNCE_DELAY);
@@ -43,7 +44,7 @@ const sortPicture = (array) => {
   let tempArray = JSON.parse(JSON.stringify(array));
 
   imgForms.addEventListener('click', (evt) => {
-    clearPitureList();
+
     switch (evt.target.id) {
       case randomButton.id:
         checkActive(randomButton);
