@@ -1,5 +1,6 @@
 import './scale-picture.js';
 import './slider-picture.js';
+import './load-picture.js';
 import { sortPicture } from './sort-picture.js';
 import { getData } from './api.js';
 import { setUserFormSubmit} from './form-validation.js';

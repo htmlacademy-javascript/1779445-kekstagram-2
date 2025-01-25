@@ -3,6 +3,7 @@ import { validation } from './hashtag-validation.js';
 import { resetSlider } from './slider-picture.js';
 import { resetScale } from './scale-picture.js';
 import { sendData } from './api.js';
+import { checkType } from './load-picture.js';
 
 const { hashtagsValidation, getHashTagsError, commentsValidation, getCommentsError } = validation;
 
@@ -15,6 +16,8 @@ const submitButton = document.querySelector('.img-upload__submit');
 const closeButton = document.querySelector('.img-upload__cancel');
 const successAlert = document.querySelector('#success').content.querySelector('.success');
 const failureAlert = document.querySelector('#error').content.querySelector('.error');
+const effectsPreview = document.querySelectorAll('.effects__preview');
+const preview = document.querySelector('.img-upload__preview img');
 const body = document.querySelector('body');
 
 let isFailureAlertOpen = false; // Переменная для отслеживания состояния окна ошибки
@@ -41,7 +44,7 @@ const showAlert = (alertType) => {
   }
 
   function onClickOutside(evt) {
-    if (alertElement.contains(evt.target)) {
+    if (alertElement === evt.target) {
       evt.preventDefault();
       closeAlert();
     }
@@ -94,10 +97,16 @@ function onDocumentKeydown(evt) {
 });
 
 pictureUploadInput.addEventListener('change', () => {
-  pictureOverlay.classList.remove('hidden');
-  body.classList.add('modal-open');
-  closeButton.addEventListener('click', closePhotoEditor);
-  document.addEventListener('keydown', onDocumentKeydown);
+  if(checkType){
+    pictureOverlay.classList.remove('hidden');
+    body.classList.add('modal-open');
+    closeButton.addEventListener('click', closePhotoEditor);
+    document.addEventListener('keydown', onDocumentKeydown);
+
+    effectsPreview.forEach((element) => {
+      element.style.backgroundImage = `url(${preview.src})`;
+    });
+  }
 });
 
 const toggleSumbitButton = (isblocked) => {
