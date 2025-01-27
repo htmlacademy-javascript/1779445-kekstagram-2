@@ -1,20 +1,35 @@
-const PICTURE_CONST = {
+const PictureConst = {
 
-  MAX_COMMENTS_UPLOADED: 5, // Максимальное количество комментариев, которые возможнго загрузить
-  MAX_COMMENTS_LENGTH: 140, // Максимальная длинна комментария
+  MAX_COMMENTS_UPLOADED: 5, // Максимальное количество комментариев, которые возможно загрузить
+  MAX_COMMENT_LENGTH: 140, // Максимальная длина комментария
 
   MAX_HASHTAG_SYMBOLS: 20, // Максимальное количество символов в хештеге, включая символ '#'
-  MAX_HASHTAG_AMOUNT: 5, // Максимальное количество хештегов
+  MAX_HASHTAGS_AMOUNT: 5, // Максимальное количество хештегов
 
   MAX_VALUE_SCALE: 100, // Максимальное значение для масштабирования изображения
   MIN_VALUE_SCALE: 25, // Минимальное значение для масштабирования изображения
   STEP_VALUE_SCALE: 25, // Шаг для изменения масштаба изображения
+  MIN_SIZE_SCALE: 1,
+
+  MIN_SLIDER_VALUE: 0, // Минимальное значение слайдера
+  MAX_SLIDER_VALUE: 1, // Максимальное значение слайдера
+  STEP_SLIDER_VALUE: 0.1, // Шаг слайдера
+
+  SCALE_FACTOR: 100, // Коэффициент для преобразования значения newValue в масштаб (от 0 до 1) для метода scale()
+  ALERT_SHOW_TIME: 5000, // Время показа ошибки
+
+  DEBOUNCE_DELAY: 500, // Время задержки дебаунса в мс
+  MAX_PICTURE_RENDERING: 10, // Максимальное колличество изображения для рендера случайных изображений
 
 };
 
-const EFFECTS = {
+// Разрешенные типы файлов
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
-  origignal: {
+// Настройки Эффектов для фильтров
+const effects = {
+
+  original: {
     filter: null,
     effectsSlider: null,
   },
@@ -22,7 +37,7 @@ const EFFECTS = {
   chrome: {
     filter: 'grayscale',
     effectsSlider: {
-      range: { min: 0, max: 1},
+      range: { min: 0, max: 1 },
       start: 1,
       step: 0.1,
     }
@@ -31,7 +46,7 @@ const EFFECTS = {
   sepia: {
     filter: 'sepia',
     effectsSlider: {
-      range: { min: 0, max: 1},
+      range: { min: 0, max: 1 },
       start: 1,
       step: 0.1,
     }
@@ -40,7 +55,7 @@ const EFFECTS = {
   marvin: {
     filter: 'invert',
     effectsSlider: {
-      range: { min: 0, max: 100},
+      range: { min: 0, max: 100 },
       start: 100,
       step: 1,
     }
@@ -49,7 +64,7 @@ const EFFECTS = {
   phobos: {
     filter: 'blur',
     effectsSlider: {
-      range: { min: 0, max: 3},
+      range: { min: 0, max: 3 },
       start: 3,
       step: 0.1,
     }
@@ -58,7 +73,7 @@ const EFFECTS = {
   heat: {
     filter: 'brightness',
     effectsSlider: {
-      range: { min: 1, max: 3},
+      range: { min: 1, max: 3 },
       start: 3,
       step: 0.1,
     }
@@ -66,4 +81,4 @@ const EFFECTS = {
 
 };
 
-export { PICTURE_CONST, EFFECTS };
+export { PictureConst, effects, FILE_TYPES };

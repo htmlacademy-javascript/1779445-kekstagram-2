@@ -1,35 +1,34 @@
-import { shuffle, debounce } from './utility.js';
+import { getShuffleArray, getDebounce} from './utility.js';
+import { renderPictures } from './rendering-picture.js';
+import { renderFullSizePicture } from './render-big-picture.js';
+import { PictureConst } from './constant.js';
+
+const { DEBOUNCE_DELAY, MAX_PICTURE_RENDERING } = PictureConst;
+
 const imgFilters = document.querySelector('.img-filters');
-const imgForms = imgFilters.querySelector('.img-filters__form');
-const defaultButton = imgFilters.querySelector('#filter-default');
-const randomButton = imgFilters.querySelector('#filter-random');
-const discussedButton = imgFilters.querySelector('#filter-discussed');
+const imgFormFilters = imgFilters.querySelector('.img-filters__form');
+const defaultButtonFilters = imgFilters.querySelector('#filter-default');
+const randomButtonFilters = imgFilters.querySelector('#filter-random');
+const discussedButtonFilters = imgFilters.querySelector('#filter-discussed');
 
-const DEBOUNCE_DELAY = 500;
-const MAX_PICTURE_RENDERING = 10;
-
-
-import { renderingPictures } from './rendering-picture.js';
-import { renderBigPicture } from './render-big-picture.js';
-
-// Меняем активный элемент
-const checkActive = (cb) => {
+// Функция для изменения визуального отображения активного элемента
+const getActiveButton = (cb) => {
   const activeButton = imgFilters.querySelector('.img-filters__button--active');
   activeButton.classList.remove('img-filters__button--active');
   cb.classList.add('img-filters__button--active');
 };
 
-// Отрисовываем картинки
-const renderView = (array) => {
-  clearPitureList();
-  renderingPictures(array);
-  renderBigPicture(array);
+// Функция для отрисовки изображений
+const renderAfterSorting = (array) => {
+  clearPictureList();
+  renderPictures(array);
+  renderFullSizePicture(array);
 };
 
-//Очищаем список
-function clearPitureList () {
-  const pictures = document.querySelectorAll('.picture');
-  pictures.forEach((picture) => {
+// Функция для очистки списка изображений
+function clearPictureList () {
+  const picturesArray = document.querySelectorAll('.picture');
+  picturesArray.forEach((picture) => {
     // Проверяем, не является ли родителем элемент <template>
     if (!picture.closest('template')) {
       picture.remove(); // Удаляем элемент picture, если он не внутри <template>
@@ -37,34 +36,39 @@ function clearPitureList () {
   });
 }
 
-// Добавляем debounce для отрисовки раз в DEBOUNCE_DELAY мс
-const debouncedRenderView = debounce(renderView, DEBOUNCE_DELAY);
+// Добавляем debounce
+const debouncedRenderView = getDebounce(renderAfterSorting, DEBOUNCE_DELAY);
 
-const sortPicture = (array) => {
-  let tempArray = JSON.parse(JSON.stringify(array));
+// Функция для сортировки изображений
+const sortingPictures = (array) => {
+  let tempArray = [...array]; // Создаем поверхностную копию массива
 
-  imgForms.addEventListener('click', (evt) => {
+  const onSorting = (sortFunction) => {
+    tempArray = sortFunction ? sortFunction([...array]) : [...array]; // Используем переданную функцию сортировки
+    debouncedRenderView(tempArray);
+  };
 
+  imgFormFilters.addEventListener('click', (evt) => {
     switch (evt.target.id) {
-      case randomButton.id:
-        checkActive(randomButton);
-        tempArray = shuffle(tempArray).slice(0, MAX_PICTURE_RENDERING);
-        debouncedRenderView(tempArray);
-        tempArray = JSON.parse(JSON.stringify(array));
+      case randomButtonFilters.id:
+        getActiveButton(randomButtonFilters);
+        onSorting(() => getShuffleArray(tempArray).slice(0, MAX_PICTURE_RENDERING));
         break;
-      case discussedButton.id:
-        checkActive(discussedButton);
-        tempArray = tempArray.sort((a, b) => b.comments.length - a.comments.length);
-        debouncedRenderView(tempArray);
-        tempArray = JSON.parse(JSON.stringify(array));
+
+      case discussedButtonFilters.id:
+        getActiveButton(discussedButtonFilters);
+        onSorting((arr) => arr.sort((a, b) => b.comments.length - a.comments.length));
         break;
+
       default:
-        checkActive(defaultButton);
-        debouncedRenderView(array);
+        getActiveButton(defaultButtonFilters);
+        onSorting();
         break;
     }
   });
 };
+
+
 imgFilters.classList.remove('img-filters--inactive');
 
-export { sortPicture };
+export { sortingPictures };

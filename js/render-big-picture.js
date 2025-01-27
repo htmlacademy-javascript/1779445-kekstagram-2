@@ -1,12 +1,12 @@
 import { isEscapeKey } from './utility.js';
-import { PICTURE_CONST } from './constant.js';
+import { PictureConst } from './constant.js';
 
-const { MAX_COMMENTS_UPLOADED } = PICTURE_CONST;
+const { MAX_COMMENTS_UPLOADED } = PictureConst;
 
-const pictures = document.querySelector('.pictures');
-const bigPictureOverlay = document.querySelector('.big-picture');
-const cancelButton = bigPictureOverlay.querySelector('.big-picture__cancel');
-const ulList = document.querySelector('.social__comments');
+const picturesContainer = document.querySelector('.pictures');
+const FullSizePictureOverlay = document.querySelector('.big-picture');
+const cancelButtonOverlay = FullSizePictureOverlay.querySelector('.big-picture__cancel');
+const commentsList = document.querySelector('.social__comments');
 const commentsLoader = document.querySelector('.social__comments-loader');
 const body = document.body;
 
@@ -14,7 +14,7 @@ let currentCommentIndex = 0; // Индекс текущего комментар
 let currentComments = []; // Массив для хранения комментариев текущего изображения
 
 // Создание комментариев к изображению //
-const createcomment = () => {
+const loadComments = () => {
   // Добавляем комментарии по 5 штук
   const nextComments = currentComments.slice(currentCommentIndex, currentCommentIndex + MAX_COMMENTS_UPLOADED);
 
@@ -26,7 +26,7 @@ const createcomment = () => {
     `<img class="social__picture" src="${avatar}" alt="${name}" width="35" height="35">
     <p class="social__text">${message}</p>`;
 
-    ulList.appendChild(liElement);
+    commentsList.appendChild(liElement);
   });
 
   currentCommentIndex += MAX_COMMENTS_UPLOADED;
@@ -38,12 +38,12 @@ const createcomment = () => {
 };
 
 // Функция для отрисовки большого изображения //
-const renderBigPicture = (pictureList) => {
+const renderFullSizePicture = (pictureList) => {
 
   // Открытие полноразмерного изображения //
-  const openPhoto = ({ url, likes, comments, description }) => {
+  const openPicture = ({ url, likes, comments, description }) => {
     body.classList.add('modal-open');
-    bigPictureOverlay.classList.remove('hidden');
+    FullSizePictureOverlay.classList.remove('hidden');
 
     document.querySelector('.big-picture__img img').src = url;
     document.querySelector('.likes-count').textContent = likes;
@@ -52,37 +52,36 @@ const renderBigPicture = (pictureList) => {
 
     currentCommentIndex = 0;
     currentComments = comments;
-    ulList.innerHTML = '';
-    createcomment();
+    commentsList.innerHTML = '';
+    loadComments();
     document.addEventListener('keydown', onDocumentKeydown);
   };
 
-  const closePhoto = () => {
-    bigPictureOverlay.classList.add('hidden');
+  const closePicture = () => {
+    FullSizePictureOverlay.classList.add('hidden');
     body.classList.remove('modal-open');
 
     // Удаляем обработчики событий при закрытии
-    commentsLoader.removeEventListener('click', createcomment);
+    commentsLoader.removeEventListener('click', loadComments);
     document.removeEventListener('keydown', onDocumentKeydown);
-    cancelButton.removeEventListener('click', closePhoto);
+    cancelButtonOverlay.removeEventListener('click', closePicture);
   };
 
   function onDocumentKeydown (evt) {
     if (isEscapeKey(evt)) {
-      closePhoto();
+      closePicture();
     }
   }
 
-  pictures.addEventListener('click', (evt) => {
+  picturesContainer.addEventListener('click', (evt) => {
     if (evt.target.classList.contains('picture__img')) {
       const selectedPicture = pictureList.find((item) => item.id === Number(evt.target.dataset.id));
-      openPhoto(selectedPicture);
+      openPicture(selectedPicture);
     }
-    cancelButton.addEventListener('click', () => closePhoto());
   });
 
-  commentsLoader.addEventListener('click', () => createcomment());
+  cancelButtonOverlay.addEventListener('click', () => closePicture());
+  commentsLoader.addEventListener('click', () => loadComments());
 };
 
-
-export { renderBigPicture };
+export { renderFullSizePicture };

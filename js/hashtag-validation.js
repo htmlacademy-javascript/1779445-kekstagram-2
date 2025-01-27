@@ -1,6 +1,6 @@
-import { PICTURE_CONST } from './constant.js';
+import { PictureConst } from './constant.js';
 
-const { MAX_HASHTAG_SYMBOLS ,MAX_HASHTAG_AMOUNT, MAX_COMMENTS_LENGTH } = PICTURE_CONST;
+const { MAX_HASHTAG_SYMBOLS, MAX_HASHTAGS_AMOUNT, MAX_COMMENT_LENGTH } = PictureConst;
 
 // Правила валидации хештегов
 const hashtagRules = [
@@ -14,14 +14,14 @@ const hashtagRules = [
   },
   {
     check: (inputValue) => inputValue.every((item) => item.length <= MAX_HASHTAG_SYMBOLS),
-    error: 'Хештег не должен быть длиннее 20 символов',
+    error: `Хештег не должен быть длиннее ${MAX_HASHTAG_SYMBOLS} символов`,
   },
   {
     check: (inputValue) => inputValue.every((item) => !item.slice(1).includes('#')),
     error: 'Хэштеги разделяются пробелами',
   },
   {
-    check: (inputValue) => inputValue.every((item) => /^#[a-zа-яё0-9]{0,19}$/i.test(item)),
+    check: (inputValue) => inputValue.every((item) => new RegExp(`^#[a-zа-яё0-9]{1,${MAX_HASHTAG_SYMBOLS}}$`, 'i').test(item)),
     error: 'Недопустимые символы, допустимы буквы, цифры и символ \'#\'',
   },
   {
@@ -29,15 +29,14 @@ const hashtagRules = [
     error: 'Хештеги не должны повторяться',
   },
   {
-    check: (inputValue) => inputValue.length <= MAX_HASHTAG_AMOUNT,
-    error: `Нельзя указать больше ${ MAX_HASHTAG_AMOUNT } хештегов`,
+    check: (inputValue) => inputValue.length <= MAX_HASHTAGS_AMOUNT,
+    error: `Нельзя указать больше ${MAX_HASHTAGS_AMOUNT} хештегов`,
   },
-
 ];
 
 // функция для проверки хештега
-const hashtagsValidation = (value) => {
-  if(!value.trim()) {
+const checkHashtagOnValid = (value) => {
+  if (!value.trim()) {
     return true; // Пустое значение является допустимым
   }
 
@@ -46,21 +45,22 @@ const hashtagsValidation = (value) => {
 };
 
 // Функция для получения предупреждения об ошибке в хештеге
-const getHashTagsError = (value) => {
+const getHashtagError = (value) => {
   const inputValue = value.trim().toLowerCase().split(/\s+/);
   const rule = hashtagRules.find((rules) => !rules.check(inputValue));
   return rule ? rule.error : '';
 };
 
 // функция для проверки комментария
-const commentsValidation = (value) => value.length <= MAX_COMMENTS_LENGTH;
+const checkCommentOnValid = (value) => value.length <= MAX_COMMENT_LENGTH;
 
 // Функция для получения текста об ошибке в комментарии
-const getCommentsError = () => `Длина комментария не может составлять больше ${ MAX_COMMENTS_LENGTH } символов`;
+const getCommentError = () => `Длина комментария не может составлять больше ${MAX_COMMENT_LENGTH} символов`;
+
 
 export const validation = {
-  hashtagsValidation,
-  getHashTagsError,
-  commentsValidation,
-  getCommentsError,
+  checkHashtagOnValid,
+  getHashtagError,
+  checkCommentOnValid,
+  getCommentError,
 };
