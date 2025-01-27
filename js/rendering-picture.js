@@ -1,24 +1,23 @@
-const pictureListElement = document.querySelector('.pictures');
-const picturesElementTemplate = document.querySelector('#picture').content.querySelector('.picture');
-const pictureFragment = document.createDocumentFragment();
+const picturesContainerElement = document.querySelector('.pictures');
+const picturesTemplateElement = document.querySelector('#picture').content.querySelector('.picture');
+const pictureFragmentElement = document.createDocumentFragment();
 
 // Отрисовываем изображения
-const renderingPictures = (pictureArrayObj) => {
+const renderPictures = (pictureArrayObj) => {
   pictureArrayObj.forEach(({ url, description, id, likes, comments }) => {
-    const photosElement = picturesElementTemplate.cloneNode(true);
-    const imgElement = photosElement.querySelector('.picture__img');
+    const photoElement = picturesTemplateElement.cloneNode(true);
+    const imgElement = photoElement.querySelector('.picture__img');
 
     imgElement.src = url;
     imgElement.alt = description;
     imgElement.dataset.id = id;
-    photosElement.querySelector('.picture__likes').textContent = likes;
-    photosElement.querySelector('.picture__comments').textContent = comments.length;
+    photoElement.querySelector('.picture__likes').textContent = likes;
+    photoElement.querySelector('.picture__comments').textContent = comments.length;
 
-    pictureFragment.appendChild(photosElement);
+    pictureFragmentElement.appendChild(photoElement);
   });
 
-  pictureListElement.appendChild(pictureFragment);
-
+  picturesContainerElement.appendChild(pictureFragmentElement);
 };
 
-export { renderingPictures };
+export { renderPictures };
