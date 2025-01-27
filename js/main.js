@@ -34,4 +34,5 @@ getData()
     showFailureAlert();
   });
 
+// Отправляем форму с изображением и настройками
 onSubmitUserForm();
