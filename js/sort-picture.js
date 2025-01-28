@@ -1,6 +1,5 @@
 import { getShuffleArray, getDebounce} from './utility.js';
 import { renderPictures } from './rendering-picture.js';
-import { renderFullSizePicture } from './render-big-picture.js';
 import { PictureConst } from './constant.js';
 
 const { DEBOUNCE_DELAY, MAX_PICTURE_RENDERING } = PictureConst;
@@ -22,7 +21,6 @@ const getActiveButton = (cb) => {
 const renderAfterSorting = (array) => {
   clearPictureList();
   renderPictures(array);
-  renderFullSizePicture(array);
 };
 
 // Функция для очистки списка изображений
