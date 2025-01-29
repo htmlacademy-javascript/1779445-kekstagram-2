@@ -41,7 +41,7 @@ const checkHashtagOnValid = (value) => {
   }
 
   const inputValue = value.trim().toLowerCase().split(/\s+/);
-  return hashtagRules.every((rule) => rule.check(inputValue));
+  return hashtagRules.every((rules) => rules.check(inputValue));
 };
 
 // Функция для получения предупреждения об ошибке в хештеге

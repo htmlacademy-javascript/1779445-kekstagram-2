@@ -3,8 +3,8 @@ const picturesTemplateElement = document.querySelector('#picture').content.query
 const pictureFragmentElement = document.createDocumentFragment();
 
 // Отрисовываем изображения
-const renderPictures = (pictureArrayObj) => {
-  pictureArrayObj.forEach(({ url, description, id, likes, comments }) => {
+const renderPictures = (pictureArrayObjects) => {
+  pictureArrayObjects.forEach(({ url, description, id, likes, comments }) => {
     const photoElement = picturesTemplateElement.cloneNode(true);
     const imgElement = photoElement.querySelector('.picture__img');
 

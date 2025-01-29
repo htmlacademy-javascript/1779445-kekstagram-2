@@ -14,7 +14,7 @@ let currentCommentIndex = 0; // Индекс текущего комментар
 let currentComments = []; // Массив для хранения комментариев текущего изображения
 
 // Создание комментариев к изображению //
-const loadComments = () => {
+const onCommentsLoad = () => {
   // Добавляем комментарии по 5 штук
   const nextComments = currentComments.slice(currentCommentIndex, currentCommentIndex + MAX_COMMENTS_UPLOADED);
 
@@ -22,9 +22,19 @@ const loadComments = () => {
     const liElement = document.createElement('li');
     liElement.classList.add('social__comment');
 
-    liElement.innerHTML =
-    `<img class="social__picture" src="${avatar}" alt="${name}" width="35" height="35">
-    <p class="social__text">${message}</p>`;
+    const imgElement = document.createElement('img');
+    imgElement.className = 'social__picture';
+    imgElement.src = avatar;
+    imgElement.alt = name;
+    imgElement.width = 35;
+    imgElement.height = 35;
+
+    const pElement = document.createElement('p');
+    pElement.className = 'social__text';
+    pElement.textContent = message;
+
+    liElement.appendChild(imgElement);
+    liElement.appendChild(pElement);
 
     commentsList.appendChild(liElement);
   });
@@ -38,7 +48,7 @@ const loadComments = () => {
 };
 
 // Функция для отрисовки большого изображения //
-const renderFullSizePicture = (pictureList) => {
+const renderFullSizePicture = (pictureArrayObjects) => {
 
   // Открытие полноразмерного изображения //
   const openPicture = ({ url, likes, comments, description }) => {
@@ -53,35 +63,35 @@ const renderFullSizePicture = (pictureList) => {
     currentCommentIndex = 0;
     currentComments = comments;
     commentsList.innerHTML = '';
-    loadComments();
+    onCommentsLoad();
     document.addEventListener('keydown', onDocumentKeydown);
   };
 
-  const closePicture = () => {
+  const onModalClose = () => {
     FullSizePictureOverlay.classList.add('hidden');
     body.classList.remove('modal-open');
 
     // Удаляем обработчики событий при закрытии
-    commentsLoader.removeEventListener('click', loadComments);
+    commentsLoader.removeEventListener('click', onCommentsLoad);
     document.removeEventListener('keydown', onDocumentKeydown);
-    cancelButtonOverlay.removeEventListener('click', closePicture);
+    cancelButtonOverlay.removeEventListener('click', onModalClose);
   };
 
   function onDocumentKeydown (evt) {
     if (isEscapeKey(evt)) {
-      closePicture();
+      onModalClose();
     }
   }
 
   picturesContainer.addEventListener('click', (evt) => {
     if (evt.target.classList.contains('picture__img')) {
-      const selectedPicture = pictureList.find((item) => item.id === Number(evt.target.dataset.id));
+      const selectedPicture = pictureArrayObjects.find((item) => item.id === Number(evt.target.dataset.id));
       openPicture(selectedPicture);
     }
   });
 
-  cancelButtonOverlay.addEventListener('click', () => closePicture());
-  commentsLoader.addEventListener('click', () => loadComments());
+  cancelButtonOverlay.addEventListener('click', () => onModalClose());
+  commentsLoader.addEventListener('click', () => onCommentsLoad());
 };
 
 export { renderFullSizePicture };

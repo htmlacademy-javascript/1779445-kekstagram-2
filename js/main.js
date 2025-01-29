@@ -1,8 +1,8 @@
-import { displayModal, onSubmitUserForm } from './form-validation.js';
+import { onModalShow, onUserFormSubmit } from './form-validation.js';
 import { getData } from './api.js';
 import { renderPictures } from './rendering-picture.js';
 import { renderFullSizePicture } from './render-big-picture.js';
-import { sortingPictures } from './sort-picture.js';
+import { getSortedPictures } from './sort-picture.js';
 import { showFailureAlert } from './utility.js';
 import './scale-picture.js';
 import './slider-filter-picture.js';
@@ -12,27 +12,27 @@ const imgForms = document.querySelector('.img-filters__form');
 // Скрываем блок фильтров изначально
 imgForms.classList.add('img-filters--inactive');
 
-displayModal();
+onModalShow();
 
 getData()
-  .then((pictureArrayObj) => {
+  .then((pictureArrayObjects) => {
     // Создаем массив промисов для ожидания завершения функций
     const renderPromises = [
-      renderFullSizePicture(pictureArrayObj),
-      renderPictures(pictureArrayObj)
+      renderFullSizePicture(pictureArrayObjects),
+      renderPictures(pictureArrayObjects)
     ];
 
     // Ждем завершения всех промисов и возвращаем pictureArrayObj
-    return Promise.all(renderPromises).then(() => pictureArrayObj);
+    return Promise.all(renderPromises).then(() => pictureArrayObjects);
   })
-  .then((pictureArrayObj) => {
+  .then((pictureArrayObjects) => {
     // Удаляем класс только после завершения всех рендерингов
     imgForms.classList.remove('img-filters--inactive');
-    sortingPictures(pictureArrayObj);
+    getSortedPictures(pictureArrayObjects);
   })
   .catch(() => {
     showFailureAlert();
   });
 
 // Отправляем форму с изображением и настройками
-onSubmitUserForm();
+onUserFormSubmit();

@@ -18,9 +18,9 @@ const getActiveButton = (cb) => {
 };
 
 // Функция для отрисовки изображений
-const renderAfterSorting = (array) => {
+const renderAfterSorting = (pictureArrayObjects) => {
   clearPictureList();
-  renderPictures(array);
+  renderPictures(pictureArrayObjects);
 };
 
 // Функция для очистки списка изображений
@@ -38,29 +38,29 @@ function clearPictureList () {
 const debouncedRenderView = getDebounce(renderAfterSorting, DEBOUNCE_DELAY);
 
 // Функция для сортировки изображений
-const sortingPictures = (array) => {
-  let tempArray = [...array]; // Создаем поверхностную копию массива
+const getSortedPictures = (pictureArrayObjects) => {
+  let temporaryArrays = [...pictureArrayObjects]; // Создаем поверхностную копию массива
 
-  const onSorting = (sortFunction) => {
-    tempArray = sortFunction ? sortFunction([...array]) : [...array]; // Используем переданную функцию сортировки
-    debouncedRenderView(tempArray);
+  const onSortedClick = (sortFunction) => {
+    temporaryArrays = sortFunction ? sortFunction([...pictureArrayObjects]) : [...pictureArrayObjects]; // Используем переданную функцию сортировки
+    debouncedRenderView(temporaryArrays);
   };
 
   imgFormFilters.addEventListener('click', (evt) => {
     switch (evt.target.id) {
       case randomButtonFilters.id:
         getActiveButton(randomButtonFilters);
-        onSorting(() => getShuffleArray(tempArray).slice(0, MAX_PICTURE_RENDERING));
+        onSortedClick(() => getShuffleArray(temporaryArrays).slice(0, MAX_PICTURE_RENDERING));
         break;
 
       case discussedButtonFilters.id:
         getActiveButton(discussedButtonFilters);
-        onSorting((arr) => arr.sort((a, b) => b.comments.length - a.comments.length));
+        onSortedClick((arrays) => arrays.sort((a, b) => b.comments.length - a.comments.length));
         break;
 
       default:
         getActiveButton(defaultButtonFilters);
-        onSorting();
+        onSortedClick();
         break;
     }
   });
@@ -69,4 +69,4 @@ const sortingPictures = (array) => {
 
 imgFilters.classList.remove('img-filters--inactive');
 
-export { sortingPictures };
+export { getSortedPictures };

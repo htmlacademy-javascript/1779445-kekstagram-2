@@ -25,7 +25,7 @@ const body = document.querySelector('body');
 let isFailureAlertOpen = false; // Переменная для отслеживания сообщения об ошибке
 
 // Функция для отображения модального окна загрузки изображения
-export const displayModal = () => {
+export const onModalShow = () => {
 
   let isMatches;
   // Проверяем тип файла, выбранного пользователем
@@ -46,7 +46,7 @@ export const displayModal = () => {
     if (isMatches) {
       uploadOverlay.classList.remove('hidden');
       body.classList.add('modal-open');
-      cancelButton.addEventListener('click', closePhotoEditor);
+      cancelButton.addEventListener('click', onPhotoEditorClose);
       document.addEventListener('keydown', onDocumentKeydown);
 
       // Устанавливаем фоновое изображение для эффектов
@@ -62,32 +62,33 @@ const showAlert = (alertType) => {
   const alertElement = alertType.cloneNode(true);
   body.appendChild(alertElement);
 
-  const closeAlert = () => {
-    document.removeEventListener('keydown', onDocumentKeydownAlert);
-    document.removeEventListener('click', onClickOutside);
+  const onAlertClose = () => {
+    document.removeEventListener('keydown', onDocumentAlertKeydown);
+    document.removeEventListener('click', onOutsideClick);
     alertElement.remove();
+
     if (alertType === failureAlert) {
       isFailureAlertOpen = false; // Сброс состояния ошибки
     }
   };
 
-  function onDocumentKeydownAlert(evt) {
+  function onDocumentAlertKeydown(evt) {
     if (isEscapeKey(evt)) {
       evt.preventDefault();
-      closeAlert();
+      onAlertClose();
     }
   }
 
-  function onClickOutside(evt) {
+  function onOutsideClick(evt) {
     if (alertElement === evt.target) {
       evt.preventDefault();
-      closeAlert();
+      onAlertClose();
     }
   }
 
-  alertElement.querySelector('.success__button, .error__button').addEventListener('click', closeAlert);
-  document.addEventListener('keydown', onDocumentKeydownAlert);
-  document.addEventListener('click', onClickOutside);
+  alertElement.querySelector('.success__button, .error__button').addEventListener('click', onAlertClose);
+  document.addEventListener('keydown', onDocumentAlertKeydown);
+  document.addEventListener('click', onOutsideClick);
 };
 
 const showSuccessAlert = () => showAlert(successAlert);
@@ -104,11 +105,12 @@ const pristine = new Pristine(uploadForm, {
   errorClass: 'img-upload__field-wrapper--error',
 });
 
-function closePhotoEditor() {
+// onPhotoEditoClose
+function onPhotoEditorClose() {
   uploadOverlay.classList.add('hidden');
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
-  cancelButton.removeEventListener('click', closePhotoEditor);
+  cancelButton.removeEventListener('click', onPhotoEditorClose);
   uploadForm.reset();
   pristine.reset();
   resetSlider();
@@ -118,7 +120,7 @@ function closePhotoEditor() {
 function onDocumentKeydown(evt) {
   if (isEscapeKey(evt) && !isFailureAlertOpen) {
     evt.preventDefault();
-    closePhotoEditor();
+    onPhotoEditorClose();
   }
 }
 
@@ -138,14 +140,14 @@ const toggleSubmitButton = (isBlocked) => {
 };
 
 // Функция-обработчик для отправки данных с формы
-const onSubmitUserForm = () => {
+const onUserFormSubmit = () => {
   uploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     toggleSubmitButton(true);
     if (pristine.validate()) {
       sendData(new FormData(evt.target))
         .then(() => {
-          closePhotoEditor();
+          onPhotoEditorClose();
           toggleSubmitButton(false);
           showSuccessAlert();
         })
@@ -163,5 +165,5 @@ const onSubmitUserForm = () => {
 pristine.addValidator(hashtagsInput, checkHashtagOnValid, getHashtagError);
 pristine.addValidator(textDescription, checkCommentOnValid, getCommentError);
 
-export { onSubmitUserForm };
+export { onUserFormSubmit };
 
