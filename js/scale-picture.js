@@ -8,7 +8,7 @@ const valueControl = document.querySelector('.scale__control--value');
 const pictureSizeControl = document.querySelector('.img-upload__preview img');
 
 // Функция для изменения значения масштаба
-const changeScale = (step) => {
+const onScaleChange = (step) => {
   const currentValue = parseInt(valueControl.value, 10);
   const newValue = currentValue + step;
 
@@ -19,8 +19,8 @@ const changeScale = (step) => {
 };
 
 // Добавляем обработчики событий для кнопок увеличения и уменьшения масштаба
-smallerControl.addEventListener('click', () => changeScale (-STEP_VALUE_SCALE));
-biggerControl.addEventListener('click', () => changeScale (STEP_VALUE_SCALE));
+smallerControl.addEventListener('click', () => onScaleChange (-STEP_VALUE_SCALE));
+biggerControl.addEventListener('click', () => onScaleChange (STEP_VALUE_SCALE));
 
 // Функция для сброса масштаба к значению по умолчанию
 export const resetScale = () => {

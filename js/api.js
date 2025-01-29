@@ -5,7 +5,7 @@ const Route = {
   SEND_DATA: '/',
 };
 
-// Получаем универсальный обработчик для загрузки и отправки данных
+// Функция для приема и отправки данных
 const loadData = (route, method = 'GET', body = null) =>
   fetch (`${BASE_URL}${route}`, {method, body})
     .then((response) => {
